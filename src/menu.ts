@@ -70,6 +70,8 @@ const load = () => {
     console.log(event);
     if (!event.altKey || !event.shiftKey) return;
   
+    console.log('Opening menu...');
+
     event.preventDefault();
     event.stopPropagation();
   
@@ -109,6 +111,7 @@ document.body.appendChild(menuElement);
 let menuOpen = false;
 
 const openMenu = () => {
+  console.log('open menu');
   menuElement.style.display = 'block';
   menuOpen = true;
 
@@ -118,6 +121,7 @@ const openMenu = () => {
 };
 
 const closeMenu = () => {
+  console.log('close menu');
   menuElement.style.opacity = '0';
   menuOpen = false;
 

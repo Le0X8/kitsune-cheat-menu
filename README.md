@@ -16,6 +16,10 @@ Cheat menu for the Google Champion Island game (aka kitsune)
 ```js
 document.body.appendChild((()=>{const e=document.createElement('script');e.src='https://cdn.jsdelivr.net/gh/Le0X8/kitsune-cheat-menu@latest/dist/cheat.js';return e;})());
 ```
+<!--
+Code without caching:
+document.body.appendChild((()=>{const e=document.createElement('script');e.src='https://le0x8.github.io/kitsune-cheat-menu/dist/cheat.js';return e;})());
+-->
 
 ## Usage
 
