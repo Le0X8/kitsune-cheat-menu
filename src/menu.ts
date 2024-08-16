@@ -57,17 +57,6 @@ const showMsg = (message: string, type: MsgType) => {
   }, 5500);
 }
 
-window.addEventListener('keydown', (event) => {
-  console.log(event);
-  if (!event.altKey || !event.shiftKey) return;
-
-  event.preventDefault();
-  event.stopPropagation();
-
-  if (menuOpen) openMenu();
-  else closeMenu();
-})
-
 declare global {
   interface Window {
     menuLoaded: boolean;
@@ -76,6 +65,17 @@ declare global {
 
 const load = () => {
   window.menuLoaded = true;
+
+  window.addEventListener('keydown', (event) => {
+    console.log(event);
+    if (!event.altKey || !event.shiftKey) return;
+  
+    event.preventDefault();
+    event.stopPropagation();
+  
+    if (menuOpen) openMenu();
+    else closeMenu();
+  });
 }
 
 const alreadyLoaded = () => {
