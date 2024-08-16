@@ -68,7 +68,10 @@ const load = () => {
 
   window.addEventListener('keydown', (event) => {
     console.log(event);
-    if (!event.altKey || !event.shiftKey) return;
+    if (!event.altKey || !event.shiftKey) {
+      console.log('Not opening menu...');
+      return;
+    }
   
     console.log('Opening menu...');
 
