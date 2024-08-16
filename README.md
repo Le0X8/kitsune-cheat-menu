@@ -14,7 +14,7 @@ Cheat menu for the Google Champion Island game (aka kitsune)
 2. Open the devtools, paste the following code (your browser may block pasting cuz pasting unknown stuff is dangerous here) and press <kbd>enter</kbd>:
 
 ```js
-document.body.appendChild((()=>{const e=document.createElement('script');e.src='https://cdn.jsdelivr.net/gh/Le0X8/kitsune-cheat-menu/dist/cheat.js';return e;})());
+document.body.appendChild((()=>{const e=document.createElement('script');e.src='https://cdn.jsdelivr.net/gh/Le0X8/kitsune-cheat-menu@latest/dist/cheat.js';return e;})());
 ```
 
 ## Usage

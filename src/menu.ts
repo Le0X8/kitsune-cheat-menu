@@ -57,6 +57,16 @@ const showMsg = (message: string, type: MsgType) => {
   }, 5500);
 }
 
+window.addEventListener('keydown', (event) => {
+  if (!event.altKey || !event.ctrlKey) return;
+  
+  event.preventDefault();
+  event.stopPropagation();
+
+  if (menuOpen) openMenu();
+  else closeMenu();
+})
+
 declare global {
   interface Window {
     menuLoaded: boolean;
@@ -78,6 +88,42 @@ const showLoaded = () => {
 const showAlreadyLoaded = () => {
   showMsg('Cheat menu already loaded!', 'info');
 }
+
+const menuElement = document.createElement('div');
+menuElement.style.position = 'fixed';
+menuElement.style.top = '0';
+menuElement.style.left = '0';
+menuElement.style.width = '100vw';
+menuElement.style.height = '100vh';
+menuElement.style.backgroundColor = '#000a';
+menuElement.style.color = '#fff';
+menuElement.style.zIndex = '9999';
+menuElement.style.padding = '2rem';
+menuElement.style.display = 'none';
+menuElement.style.opacity = '0';
+menuElement.style.transition = 'all 0.33s';
+menuElement.style.overflowY = 'auto';
+document.body.appendChild(menuElement);
+
+let menuOpen = false;
+
+const openMenu = () => {
+  menuElement.style.display = 'block';
+  menuOpen = true;
+
+  setTimeout(() => {
+    menuElement.style.opacity = '1';
+  }, 100);
+};
+
+const closeMenu = () => {
+  menuElement.style.opacity = '0';
+  menuOpen = false;
+
+  setTimeout(() => {
+    menuElement.style.display = 'none';
+  }, 600);
+};
 
 export const menu = {
   showLoaded,
