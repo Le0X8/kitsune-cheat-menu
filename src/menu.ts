@@ -64,25 +64,25 @@ declare global {
 }
 
 let menuOpen = false;
+let menuOpenRunning = false;
+
+const menuOpenListener = (event: KeyboardEvent) => {
+  if (menuOpenRunning) return;
+  if (!event.altKey || !event.shiftKey) return;
+
+  event.preventDefault();
+  event.stopPropagation();
+
+  //console.log('menuOpen', menuOpen);
+
+  if (!menuOpen) openMenu();
+  else closeMenu();
+};
 
 const load = () => {
   window.menuLoaded = true;
 
-  window.addEventListener('keydown', (event) => {
-    console.log(event);
-    if (!event.altKey || !event.shiftKey) {
-      console.log('Not opening menu...');
-      return;
-    }
-  
-    console.log('Opening menu...');
-
-    event.preventDefault();
-    event.stopPropagation();
-  
-    if (!menuOpen) openMenu();
-    else closeMenu();
-  });
+  window.addEventListener('keydown', menuOpenListener);
 }
 
 const alreadyLoaded = () => {
@@ -113,23 +113,60 @@ menuElement.style.transition = 'all 0.33s';
 menuElement.style.overflowY = 'auto';
 document.body.appendChild(menuElement);
 
+let blockInputListenerA: unknown = null;
+let blockInputListenerB: unknown = null;
+let blockInputListenerC: unknown = null;
+
 const openMenu = () => {
-  console.log('open menu');
+  if (menuOpenRunning) return;
+  menuOpenRunning = true;
   menuElement.style.display = 'block';
   menuOpen = true;
+
+  menuElement.tabIndex = -1;
+  menuElement.focus();
+  menuElement.click();
+
+  blockInputListenerA = window.addEventListener('keydown', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    menuOpenListener(event);
+  });
+  blockInputListenerB = window.addEventListener('keyup', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+  });
+  blockInputListenerC = window.addEventListener('keypress', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+  });
 
   setTimeout(() => {
     menuElement.style.opacity = '1';
   }, 100);
+
+  setTimeout(() => {
+    menuOpenRunning = false;
+  }, 600);
 };
 
 const closeMenu = () => {
-  console.log('close menu');
+  if (menuOpenRunning) return;
+  menuOpenRunning = true;
   menuElement.style.opacity = '0';
   menuOpen = false;
 
+  window.removeEventListener('keydown', blockInputListenerA as EventListener);
+  window.removeEventListener('keyup', blockInputListenerB as EventListener);
+  window.removeEventListener('keypress', blockInputListenerC as EventListener);
+
+  document.querySelector('canvas')!.tabIndex = -1;
+  document.querySelector('canvas')?.focus();
+  document.querySelector('canvas')?.click();
+
   setTimeout(() => {
     menuElement.style.display = 'none';
+    menuOpenRunning = false;
   }, 600);
 };
 

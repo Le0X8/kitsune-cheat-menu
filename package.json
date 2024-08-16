@@ -1,5 +1,9 @@
 {
   "main": "dist/main.js",
+  "scripts": {
+    "build-use": "tsup && xclip -sel c < dist/cheat.js",
+    "build": "tsup"
+  },
   "devDependencies": {
     "terser": "^5.31.6",
     "tsup": "^8.2.4",
