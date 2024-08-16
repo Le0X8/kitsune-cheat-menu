@@ -1,3 +1,8 @@
 import { menu } from './menu';
 
-menu.showLoaded();
+if (menu.alreadyLoaded()) {
+  menu.showAlreadyLoaded();
+} else {
+  menu.load();
+  menu.showLoaded();
+}

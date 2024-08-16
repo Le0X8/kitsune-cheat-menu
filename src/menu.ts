@@ -50,17 +50,38 @@ const showMsg = (message: string, type: MsgType) => {
 
   setTimeout(() => {
     element.style.opacity = '0';
-  }, 3000);
+  }, 5000);
 
   setTimeout(() => {
     document.body.removeChild(container);
-  }, 3500);
+  }, 5500);
+}
+
+declare global {
+  interface Window {
+    menuLoaded: boolean;
+  }
+}
+
+const load = () => {
+  window.menuLoaded = true;
+}
+
+const alreadyLoaded = () => {
+  return window.menuLoaded;
 }
 
 const showLoaded = () => {
   showMsg('Cheat menu loaded!', 'success');
 };
 
+const showAlreadyLoaded = () => {
+  showMsg('Cheat menu already loaded!', 'info');
+}
+
 export const menu = {
-  showLoaded
+  showLoaded,
+  showAlreadyLoaded,
+  load,
+  alreadyLoaded
 };
