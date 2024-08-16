@@ -58,8 +58,9 @@ const showMsg = (message: string, type: MsgType) => {
 }
 
 window.addEventListener('keydown', (event) => {
-  if (!event.altKey || !event.ctrlKey) return;
-  
+  console.log(event);
+  if (!event.altKey || !event.shiftKey) return;
+
   event.preventDefault();
   event.stopPropagation();
 
