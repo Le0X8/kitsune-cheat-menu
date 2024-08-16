@@ -63,6 +63,8 @@ declare global {
   }
 }
 
+let menuOpen = false;
+
 const load = () => {
   window.menuLoaded = true;
 
@@ -78,7 +80,7 @@ const load = () => {
     event.preventDefault();
     event.stopPropagation();
   
-    if (menuOpen) openMenu();
+    if (!menuOpen) openMenu();
     else closeMenu();
   });
 }
@@ -110,8 +112,6 @@ menuElement.style.opacity = '0';
 menuElement.style.transition = 'all 0.33s';
 menuElement.style.overflowY = 'auto';
 document.body.appendChild(menuElement);
-
-let menuOpen = false;
 
 const openMenu = () => {
   console.log('open menu');
