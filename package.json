@@ -1,11 +1,13 @@
 {
   "main": "dist/main.js",
   "scripts": {
-    "build-use": "tsup && xclip -sel c < dist/cheat.js",
-    "build": "tsup"
+    "build-use": "tsup && ts-node postbuild && xclip -sel c < dist/cheat.js",
+    "build": "tsup && ts-node postbuild"
   },
   "devDependencies": {
+    "@types/node": "^22.4.0",
     "terser": "^5.31.6",
+    "ts-node": "^10.9.2",
     "tsup": "^8.2.4",
     "typescript": "^5.5.4"
   }
