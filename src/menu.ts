@@ -1,3 +1,29 @@
+const overworldSprite = document.createElement('img');
+overworldSprite.src = 'overworld-sprite.png';
+overworldSprite.style.display = 'none';
+document.body.appendChild(overworldSprite);
+const sharedSprite = document.createElement('img');
+sharedSprite.src = 'shared-sprite.png';
+sharedSprite.style.display = 'none';
+document.body.appendChild(sharedSprite);
+
+const getSpriteImg = (sprite: HTMLImageElement, x: number, y: number, width: number, height: number) => {
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const context = canvas.getContext('2d')!;
+  context.drawImage(sprite, x, y, width, height, 0, 0, width, height);
+  return canvas.toDataURL();
+};
+
+const sprites = {
+  quests: {
+    '"Wind Stopper"': {
+      img: getSpriteImg(overworldSprite, 129, 3294, 34, 33),
+    },
+  }
+};
+
 type MsgType = 'error' | 'info' | 'warn' | 'success';
 
 const showMsg = (message: string, type: MsgType) => {
