@@ -1,3 +1,5 @@
+import { Component } from './components/component';
+
 const overworldSprite = document.createElement('img');
 overworldSprite.src = 'overworld-sprite.png';
 overworldSprite.style.display = 'none';
@@ -6,23 +8,6 @@ const sharedSprite = document.createElement('img');
 sharedSprite.src = 'shared-sprite.png';
 sharedSprite.style.display = 'none';
 document.body.appendChild(sharedSprite);
-
-const getSpriteImg = (sprite: HTMLImageElement, x: number, y: number, width: number, height: number) => {
-  const canvas = document.createElement('canvas');
-  canvas.width = width;
-  canvas.height = height;
-  const context = canvas.getContext('2d')!;
-  context.drawImage(sprite, x, y, width, height, 0, 0, width, height);
-  return canvas.toDataURL();
-};
-
-const sprites = {
-  quests: {
-    '"Wind Stopper"': {
-      img: getSpriteImg(overworldSprite, 129, 3294, 34, 33),
-    },
-  }
-};
 
 type MsgType = 'error' | 'info' | 'warn' | 'success';
 
@@ -66,7 +51,7 @@ const showMsg = (message: string, type: MsgType) => {
   element.style.transition = 'all 0.33s';
   element.style.opacity = '0';
   element.innerText = message;
-  
+
   container.appendChild(element);
   document.body.appendChild(container);
 
@@ -81,7 +66,7 @@ const showMsg = (message: string, type: MsgType) => {
   setTimeout(() => {
     document.body.removeChild(container);
   }, 5500);
-}
+};
 
 declare global {
   interface Window {
@@ -109,11 +94,11 @@ const load = () => {
   window.menuLoaded = true;
 
   window.addEventListener('keydown', menuOpenListener);
-}
+};
 
 const alreadyLoaded = () => {
   return window.menuLoaded;
-}
+};
 
 const showLoaded = () => {
   showMsg('Cheat menu loaded!', 'success');
@@ -121,14 +106,14 @@ const showLoaded = () => {
 
 const showAlreadyLoaded = () => {
   showMsg('Cheat menu already loaded!', 'info');
-}
+};
 
 const menuElement = document.createElement('div');
 menuElement.style.position = 'fixed';
 menuElement.style.top = '0';
 menuElement.style.left = '0';
-menuElement.style.width = '100vw';
-menuElement.style.height = '100vh';
+menuElement.style.width = 'calc(100vw - 4rem)';
+menuElement.style.height = 'calc(100vh - 4rem)';
 menuElement.style.backgroundColor = '#000a';
 menuElement.style.color = '#fff';
 menuElement.style.zIndex = '9999';
@@ -137,6 +122,7 @@ menuElement.style.display = 'none';
 menuElement.style.opacity = '0';
 menuElement.style.transition = 'all 0.33s';
 menuElement.style.overflowY = 'auto';
+menuElement.style.fontFamily = 'PixelMplus10, sans-serif';
 document.body.appendChild(menuElement);
 
 let blockInputListenerA: unknown = null;
@@ -196,9 +182,14 @@ const closeMenu = () => {
   }, 600);
 };
 
+const addChild = (c: Component) => {
+  c.render(menuElement);
+};
+
 export const menu = {
   showLoaded,
   showAlreadyLoaded,
   load,
-  alreadyLoaded
+  alreadyLoaded,
+  addChild,
 };
