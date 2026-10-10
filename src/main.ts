@@ -154,13 +154,10 @@ if (menu.alreadyLoaded()) {
       m3.renderChild((e) => g.render(e));
     });
     const g = new GroupComponent();
-    const i1 = spriteImg('teams', 'none');
-    i1.modifyStyle((style) => (style.height = '5rem'));
 
     const btn = new ButtonComponent('Join');
     btn.onClick(() => localStorage.removeItem('KITSUNE_PLAYER_TEAM'));
 
-    g.renderChild((e) => i1.render(e));
     g.renderChild((e) => btn.render(e));
     m3.renderChild((e) => g.render(e));
     menu.addChild(m3);
