@@ -148,6 +148,16 @@ if (menu.alreadyLoaded()) {
     g.renderChild((e) => btn.render(e));
     m3.renderChild((e) => g.render(e));
   });
+  const g = new GroupComponent();
+  const i1 = spriteImg('teams', 'none');
+  i1.modifyStyle((style) => (style.height = '5rem'));
+
+  const btn = new ButtonComponent('Join');
+  btn.onClick(() => localStorage.removeItem('KITSUNE_PLAYER_TEAM'));
+
+  g.renderChild((e) => i1.render(e));
+  g.renderChild((e) => btn.render(e));
+  m3.renderChild((e) => g.render(e));
   menu.addChild(m3);
 
   const m9 = new MenuComponent('Misc');
@@ -170,8 +180,16 @@ if (menu.alreadyLoaded()) {
       (localStorage.getItem('rainbowTopTeam') || 'false') === 'true';
     localStorage.setItem('rainbowTopTeam', String(!state_before));
   });
+  const btn11 = new ButtonComponent('Make own team first place');
+  btn11.onClick(() => {
+    localStorage.setItem(
+      'KITSUNE_FIRST_PLACE',
+      localStorage.getItem('KITSUNE_PLAYER_TEAM')!,
+    );
+  });
   g9.renderChild((e) => btn9.render(e));
   g9.renderChild((e) => btn10.render(e));
+  g9.renderChild((e) => btn11.render(e));
   m9.renderChild((e) => g9.render(e));
   menu.addChild(m9);
 
