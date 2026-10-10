@@ -50,7 +50,7 @@ const sprites = {
       y: 1886,
       width: 19,
       height: 18,
-    }
+    },
   },
   quests: {
     '"Wind Stopper"': {
@@ -90,7 +90,7 @@ const sprites = {
       width: 25,
       height: 34,
     },
-  }
+  },
 };
 
 type SpriteType = keyof typeof sprites;
@@ -102,6 +102,12 @@ export const spriteImg = (type: SpriteType, name: string): ImgComponent => {
     y: number;
     width: number;
     height: number;
-  } = sprites[type][name];
-  return new ImgComponent(sprite.sheet + '-sprite.png', sprite.x, sprite.y, sprite.width, sprite.height);
+  } = sprites[type][name as keyof (typeof sprites)[SpriteType]];
+  return new ImgComponent(
+    sprite.sheet + '-sprite.png',
+    sprite.x,
+    sprite.y,
+    sprite.width,
+    sprite.height,
+  );
 };

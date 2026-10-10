@@ -18,7 +18,7 @@ if (menu.alreadyLoaded()) {
   menu.load();
 
   const t1 = new TextComponent(
-    'press <kbd>Alt</kbd> + <kbd>Shift</kbd> to close<br><br>'
+    'press <kbd>Alt</kbd> + <kbd>Shift</kbd> to close<br><br>',
   );
   t1.modifyStyle((style) => {
     style.color = '#aaa';
@@ -49,7 +49,7 @@ if (menu.alreadyLoaded()) {
     const inp1 = new InputComponent('number', 'score');
     inp1.setValue(localStorage.getItem('KITSUNE_' + sport + '_score') || '0');
     inp1.onChangeNum((value) =>
-      localStorage.setItem('KITSUNE_' + sport + '_score', String(value))
+      localStorage.setItem('KITSUNE_' + sport + '_score', String(value)),
     );
 
     const t2 = new TextComponent('<br>Dangos<br>');
@@ -60,7 +60,7 @@ if (menu.alreadyLoaded()) {
     const inp2 = new InputComponent('number', 'dangos');
     inp2.setValue(localStorage.getItem('KITSUNE_' + sport + '_rating') || '0');
     inp2.onChangeNum((value) =>
-      localStorage.setItem('KITSUNE_' + sport + '_rating', String(value))
+      localStorage.setItem('KITSUNE_' + sport + '_rating', String(value)),
     );
 
     g.renderChild((e) => i1.render(e));
@@ -90,11 +90,13 @@ if (menu.alreadyLoaded()) {
         'archery',
       ];
       sports.forEach((sport) =>
-        localStorage.setItem('KITSUNE_' + sport + '_rating', '3')
+        localStorage.setItem('KITSUNE_' + sport + '_rating', '3'),
       );
-      Array.from(document.getElementsByClassName('dangos')).forEach(
-        (e: HTMLInputElement) => (e.value = '3')
-      );
+      Array.from(
+        document.getElementsByClassName(
+          'dangos',
+        ) as HTMLCollectionOf<HTMLInputElement>,
+      ).forEach((e) => (e.value = '3'));
     });
 
     const btn2 = new ButtonComponent('Reset all');
@@ -109,16 +111,20 @@ if (menu.alreadyLoaded()) {
         'archery',
       ];
       const keys = Object.keys(localStorage).filter((key) =>
-        sports.some((sport) => key.startsWith('KITSUNE_' + sport))
+        sports.some((sport) => key.startsWith('KITSUNE_' + sport)),
       );
       keys.forEach((key) => localStorage.removeItem(key));
 
-      Array.from(document.getElementsByClassName('score')).forEach(
-        (e: HTMLInputElement) => (e.value = '0')
-      );
-      Array.from(document.getElementsByClassName('dangos')).forEach(
-        (e: HTMLInputElement) => (e.value = '0')
-      );
+      Array.from(
+        document.getElementsByClassName(
+          'score',
+        ) as HTMLCollectionOf<HTMLInputElement>,
+      ).forEach((e) => (e.value = '0'));
+      Array.from(
+        document.getElementsByClassName(
+          'dangos',
+        ) as HTMLCollectionOf<HTMLInputElement>,
+      ).forEach((e) => (e.value = '0'));
     });
 
     g.renderChild((e) => btn1.render(e));
@@ -167,24 +173,24 @@ if (menu.alreadyLoaded()) {
     menu.addChild(t);
   } else {
     const t1 = new TextComponent(
-      'codemod disabled (only limited functionality)<br>'
+      'codemod disabled (only limited functionality)<br>',
     );
     const t2 = new TextComponent(
-      'learn about codemod <a href="https://github.com/Le0X8/kitsune-cheat-menu/blob/main/codemod.md" target="_blank">here</a><br><br>'
+      'learn about codemod <a href="https://github.com/Le0X8/kitsune-cheat-menu/blob/main/codemod.md" target="_blank">here</a><br><br>',
     );
     menu.addChild(t1);
     menu.addChild(t2);
   }
   const t2 = new TextComponent(
-    '<a href="https://github.com/Le0X8/kitsune/blob/main/credits.md" target="_blank">Credits</a><br><br>'
+    '<a href="https://github.com/Le0X8/kitsune/blob/main/credits.md" target="_blank">Credits</a><br><br>',
   );
   const t3 = new TextComponent(
-    'Created by <a href="https://github.com/Le0X8" target="_blank">Leonard Lesinski</a>'
+    'Created by <a href="https://github.com/Le0X8" target="_blank">Leonard Lesinski</a>',
   );
   t3.modifyStyle(
     (style) =>
       (style.fontFamily =
-        '"Cascadia Code", Consolas, Hack, "Noto Mono", monospace')
+        '"Cascadia Code", Consolas, Hack, "Noto Mono", monospace'),
   );
   menu.addChild(t2);
   menu.addChild(t3);
