@@ -14,212 +14,220 @@ declare global {
 
 if (menu.alreadyLoaded()) {
   menu.showAlreadyLoaded();
-} else {
-  menu.load();
+} else
+  (async () => {
+    menu.load();
 
-  const t1 = new TextComponent(
-    'press <kbd>Alt</kbd> + <kbd>Shift</kbd> to close<br><br>',
-  );
-  t1.modifyStyle((style) => {
-    style.color = '#aaa';
-    style.fontSize = '0.8rem';
-  });
-  menu.addChild(t1);
-
-  const m1 = new MenuComponent('Sports');
-  m1.modifyStyle((style) => (style.justifyContent = 'center'));
-  [
-    'marathon',
-    'rugby',
-    'pingpong',
-    'climbing',
-    'skate',
-    'swim',
-    'archery',
-  ].forEach((sport) => {
-    const g = new GroupComponent();
-    const i1 = spriteImg('sports', sport);
-    i1.modifyStyle((style) => (style.height = '5rem'));
-
-    const t1 = new TextComponent('Score<br>');
+    const t1 = new TextComponent(
+      'press <kbd>Alt</kbd> + <kbd>Shift</kbd> to close<br><br>',
+    );
     t1.modifyStyle((style) => {
-      style.fontFamily = 'inherit';
-      style.fontSize = '1.5rem';
+      style.color = '#aaa';
+      style.fontSize = '0.8rem';
     });
-    const inp1 = new InputComponent('number', 'score');
-    inp1.setValue(localStorage.getItem('KITSUNE_' + sport + '_score') || '0');
-    inp1.onChangeNum((value) =>
-      localStorage.setItem('KITSUNE_' + sport + '_score', String(value)),
-    );
+    menu.addChild(t1);
 
-    const t2 = new TextComponent('<br>Dangos<br>');
-    t2.modifyStyle((style) => {
-      style.fontFamily = 'inherit';
-      style.fontSize = '1.5rem';
-    });
-    const inp2 = new InputComponent('number', 'dangos');
-    inp2.setValue(localStorage.getItem('KITSUNE_' + sport + '_rating') || '0');
-    inp2.onChangeNum((value) =>
-      localStorage.setItem('KITSUNE_' + sport + '_rating', String(value)),
-    );
+    const m1 = new MenuComponent('Sports');
+    m1.modifyStyle((style) => (style.justifyContent = 'center'));
+    [
+      'marathon',
+      'rugby',
+      'pingpong',
+      'climbing',
+      'skate',
+      'swim',
+      'archery',
+    ].forEach((sport) => {
+      const g = new GroupComponent();
+      const i1 = spriteImg('sports', sport);
+      i1.modifyStyle((style) => (style.height = '5rem'));
 
-    g.renderChild((e) => i1.render(e));
-    g.renderChild((e) => t1.render(e));
-    g.renderChild((e) => inp1.render(e));
-    g.renderChild((e) => t2.render(e));
-    g.renderChild((e) => inp2.render(e));
-    m1.renderChild((e) => g.render(e));
-  });
-  m1.renderChild((e) => {
-    const g = new GroupComponent();
-    g.modifyStyle((style) => {
-      style.justifyContent = 'center';
-      style.flexDirection = 'row';
-      style.gap = '1rem';
-    });
-
-    const btn1 = new ButtonComponent('Get all scrolls');
-    btn1.onClick(() => {
-      const sports = [
-        'marathon',
-        'rugby',
-        'pingpong',
-        'climbing',
-        'skate',
-        'swim',
-        'archery',
-      ];
-      sports.forEach((sport) =>
-        localStorage.setItem('KITSUNE_' + sport + '_rating', '3'),
+      const t1 = new TextComponent('Score<br>');
+      t1.modifyStyle((style) => {
+        style.fontFamily = 'inherit';
+        style.fontSize = '1.5rem';
+      });
+      const inp1 = new InputComponent('number', 'score');
+      inp1.setValue(localStorage.getItem('KITSUNE_' + sport + '_score') || '0');
+      inp1.onChangeNum((value) =>
+        localStorage.setItem('KITSUNE_' + sport + '_score', String(value)),
       );
-      Array.from(
-        document.getElementsByClassName(
-          'dangos',
-        ) as HTMLCollectionOf<HTMLInputElement>,
-      ).forEach((e) => (e.value = '3'));
-    });
 
-    const btn2 = new ButtonComponent('Reset all');
-    btn2.onClick(() => {
-      const sports = [
-        'marathon',
-        'rugby',
-        'pingpong',
-        'climbing',
-        'skate',
-        'swim',
-        'archery',
-      ];
-      const keys = Object.keys(localStorage).filter((key) =>
-        sports.some((sport) => key.startsWith('KITSUNE_' + sport)),
+      const t2 = new TextComponent('<br>Dangos<br>');
+      t2.modifyStyle((style) => {
+        style.fontFamily = 'inherit';
+        style.fontSize = '1.5rem';
+      });
+      const inp2 = new InputComponent('number', 'dangos');
+      inp2.setValue(
+        localStorage.getItem('KITSUNE_' + sport + '_rating') || '0',
       );
-      keys.forEach((key) => localStorage.removeItem(key));
+      inp2.onChangeNum((value) =>
+        localStorage.setItem('KITSUNE_' + sport + '_rating', String(value)),
+      );
 
-      Array.from(
-        document.getElementsByClassName(
-          'score',
-        ) as HTMLCollectionOf<HTMLInputElement>,
-      ).forEach((e) => (e.value = '0'));
-      Array.from(
-        document.getElementsByClassName(
-          'dangos',
-        ) as HTMLCollectionOf<HTMLInputElement>,
-      ).forEach((e) => (e.value = '0'));
+      g.renderChild((e) => i1.render(e));
+      g.renderChild((e) => t1.render(e));
+      g.renderChild((e) => inp1.render(e));
+      g.renderChild((e) => t2.render(e));
+      g.renderChild((e) => inp2.render(e));
+      m1.renderChild((e) => g.render(e));
     });
+    m1.renderChild((e) => {
+      const g = new GroupComponent();
+      g.modifyStyle((style) => {
+        style.justifyContent = 'center';
+        style.flexDirection = 'row';
+        style.gap = '1rem';
+      });
 
-    g.renderChild((e) => btn1.render(e));
-    g.renderChild((e) => btn2.render(e));
+      const btn1 = new ButtonComponent('Get all scrolls');
+      btn1.onClick(() => {
+        const sports = [
+          'marathon',
+          'rugby',
+          'pingpong',
+          'climbing',
+          'skate',
+          'swim',
+          'archery',
+        ];
+        sports.forEach((sport) =>
+          localStorage.setItem('KITSUNE_' + sport + '_rating', '3'),
+        );
+        Array.from(
+          document.getElementsByClassName(
+            'dangos',
+          ) as HTMLCollectionOf<HTMLInputElement>,
+        ).forEach((e) => (e.value = '3'));
+      });
 
-    g.render(e);
-  });
-  menu.addChild(m1);
+      const btn2 = new ButtonComponent('Reset all');
+      btn2.onClick(() => {
+        const sports = [
+          'marathon',
+          'rugby',
+          'pingpong',
+          'climbing',
+          'skate',
+          'swim',
+          'archery',
+        ];
+        const keys = Object.keys(localStorage).filter((key) =>
+          sports.some((sport) => key.startsWith('KITSUNE_' + sport)),
+        );
+        keys.forEach((key) => localStorage.removeItem(key));
 
-  const m3 = new MenuComponent('Teams');
-  m3.modifyStyle((style) => (style.justifyContent = 'center'));
-  ['blue', 'red', 'green', 'yellow'].forEach((team) => {
+        Array.from(
+          document.getElementsByClassName(
+            'score',
+          ) as HTMLCollectionOf<HTMLInputElement>,
+        ).forEach((e) => (e.value = '0'));
+        Array.from(
+          document.getElementsByClassName(
+            'dangos',
+          ) as HTMLCollectionOf<HTMLInputElement>,
+        ).forEach((e) => (e.value = '0'));
+      });
+
+      g.renderChild((e) => btn1.render(e));
+      g.renderChild((e) => btn2.render(e));
+
+      g.render(e);
+    });
+    menu.addChild(m1);
+
+    const m3 = new MenuComponent('Teams');
+    m3.modifyStyle((style) => (style.justifyContent = 'center'));
+    ['blue', 'red', 'green', 'yellow'].forEach((team) => {
+      const g = new GroupComponent();
+      const i1 = spriteImg('teams', team);
+      i1.modifyStyle((style) => (style.height = '5rem'));
+
+      const btn = new ButtonComponent('Join');
+      btn.onClick(() =>
+        localStorage.setItem('KITSUNE_PLAYER_TEAM', `"${team}"`),
+      );
+
+      g.renderChild((e) => i1.render(e));
+      g.renderChild((e) => btn.render(e));
+      m3.renderChild((e) => g.render(e));
+    });
     const g = new GroupComponent();
-    const i1 = spriteImg('teams', team);
+    const i1 = spriteImg('teams', 'none');
     i1.modifyStyle((style) => (style.height = '5rem'));
 
     const btn = new ButtonComponent('Join');
-    btn.onClick(() => localStorage.setItem('KITSUNE_PLAYER_TEAM', `"${team}"`));
+    btn.onClick(() => localStorage.removeItem('KITSUNE_PLAYER_TEAM'));
 
     g.renderChild((e) => i1.render(e));
     g.renderChild((e) => btn.render(e));
     m3.renderChild((e) => g.render(e));
-  });
-  const g = new GroupComponent();
-  const i1 = spriteImg('teams', 'none');
-  i1.modifyStyle((style) => (style.height = '5rem'));
+    menu.addChild(m3);
 
-  const btn = new ButtonComponent('Join');
-  btn.onClick(() => localStorage.removeItem('KITSUNE_PLAYER_TEAM'));
+    const m9 = new MenuComponent('Misc');
+    m9.modifyStyle((style) => (style.justifyContent = 'center'));
+    const g9 = new GroupComponent();
+    g9.modifyStyle((style) => {
+      style.justifyContent = 'center';
+      style.flexDirection = 'row';
+      style.gap = '1rem';
+    });
+    const btn9 = new ButtonComponent('Cherry blossom petals');
+    btn9.onClick(() => {
+      const state_before =
+        (localStorage.getItem('KITSUNE_outro_VIDEO_SEEN') || 'false') ===
+        'true';
+      localStorage.setItem('KITSUNE_outro_VIDEO_SEEN', String(!state_before));
+    });
+    const btn10 = new ButtonComponent('Rainbow city lights');
+    btn10.onClick(() => {
+      const state_before =
+        (localStorage.getItem('rainbowTopTeam') || 'false') === 'true';
+      localStorage.setItem('rainbowTopTeam', String(!state_before));
+    });
+    const btn11 = new ButtonComponent('Make own team first place');
+    btn11.onClick(() => {
+      localStorage.setItem('rainbowTopTeam', 'false');
+      localStorage.setItem(
+        'KITSUNE_FIRST_PLACE',
+        localStorage.getItem('KITSUNE_PLAYER_TEAM')!,
+      );
+    });
+    g9.renderChild((e) => btn9.render(e));
+    g9.renderChild((e) => btn10.render(e));
+    g9.renderChild((e) => btn11.render(e));
+    m9.renderChild((e) => g9.render(e));
+    menu.addChild(m9);
 
-  g.renderChild((e) => i1.render(e));
-  g.renderChild((e) => btn.render(e));
-  m3.renderChild((e) => g.render(e));
-  menu.addChild(m3);
-
-  const m9 = new MenuComponent('Misc');
-  m9.modifyStyle((style) => (style.justifyContent = 'center'));
-  const g9 = new GroupComponent();
-  g9.modifyStyle((style) => {
-    style.justifyContent = 'center';
-    style.flexDirection = 'row';
-    style.gap = '1rem';
-  });
-  const btn9 = new ButtonComponent('Cherry blossom petals');
-  btn9.onClick(() => {
-    const state_before =
-      (localStorage.getItem('KITSUNE_outro_VIDEO_SEEN') || 'false') === 'true';
-    localStorage.setItem('KITSUNE_outro_VIDEO_SEEN', String(!state_before));
-  });
-  const btn10 = new ButtonComponent('Rainbow city lights');
-  btn10.onClick(() => {
-    const state_before =
-      (localStorage.getItem('rainbowTopTeam') || 'false') === 'true';
-    localStorage.setItem('rainbowTopTeam', String(!state_before));
-  });
-  const btn11 = new ButtonComponent('Make own team first place');
-  btn11.onClick(() => {
-    localStorage.setItem('rainbowTopTeam', 'false');
-    localStorage.setItem(
-      'KITSUNE_FIRST_PLACE',
-      localStorage.getItem('KITSUNE_PLAYER_TEAM')!,
-    );
-  });
-  g9.renderChild((e) => btn9.render(e));
-  g9.renderChild((e) => btn10.render(e));
-  g9.renderChild((e) => btn11.render(e));
-  m9.renderChild((e) => g9.render(e));
-  menu.addChild(m9);
-
-  if (window.codeMod) {
-    const t = new TextComponent('codemod enabled (full functionality)<br><br>');
-    menu.addChild(t);
-  } else {
-    const t1 = new TextComponent(
-      'codemod disabled (only limited functionality)<br>',
-    );
+    if (window.codeMod) {
+      const t = new TextComponent(
+        'codemod enabled (full functionality)<br><br>',
+      );
+      menu.addChild(t);
+    } else {
+      const t1 = new TextComponent(
+        'codemod disabled (only limited functionality)<br>',
+      );
+      const t2 = new TextComponent(
+        'learn about codemod <a href="https://github.com/Le0X8/kitsune-cheat-menu/blob/main/codemod.md" target="_blank">here</a><br><br>',
+      );
+      menu.addChild(t1);
+      menu.addChild(t2);
+    }
     const t2 = new TextComponent(
-      'learn about codemod <a href="https://github.com/Le0X8/kitsune-cheat-menu/blob/main/codemod.md" target="_blank">here</a><br><br>',
+      '<a href="https://github.com/Le0X8/kitsune/blob/main/credits.md" target="_blank">Credits</a><br><br>',
     );
-    menu.addChild(t1);
+    const t3 = new TextComponent(
+      'Created by <a href="https://github.com/Le0X8" target="_blank">Leonard Lesinski</a>',
+    );
+    t3.modifyStyle(
+      (style) =>
+        (style.fontFamily =
+          '"Cascadia Code", Consolas, Hack, "Noto Mono", monospace'),
+    );
     menu.addChild(t2);
-  }
-  const t2 = new TextComponent(
-    '<a href="https://github.com/Le0X8/kitsune/blob/main/credits.md" target="_blank">Credits</a><br><br>',
-  );
-  const t3 = new TextComponent(
-    'Created by <a href="https://github.com/Le0X8" target="_blank">Leonard Lesinski</a>',
-  );
-  t3.modifyStyle(
-    (style) =>
-      (style.fontFamily =
-        '"Cascadia Code", Consolas, Hack, "Noto Mono", monospace'),
-  );
-  menu.addChild(t2);
-  menu.addChild(t3);
+    menu.addChild(t3);
 
-  menu.showLoaded();
-}
+    menu.showLoaded();
+  })();

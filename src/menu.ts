@@ -91,8 +91,13 @@ const menuOpenListener = (event: KeyboardEvent) => {
   else closeMenu();
 };
 
-const load = () => {
+const load = async () => {
   window.menuLoaded = true;
+
+  while (typeof window.sr === 'undefined') {
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  }
+
   window.sr.prototype.tick = () => {}; // disables top team changes
 
   let currentTeamIdx = 0;
