@@ -182,6 +182,7 @@ if (menu.alreadyLoaded()) {
   });
   const btn11 = new ButtonComponent('Make own team first place');
   btn11.onClick(() => {
+    localStorage.setItem('rainbowTopTeam', 'false');
     localStorage.setItem(
       'KITSUNE_FIRST_PLACE',
       localStorage.getItem('KITSUNE_PLAYER_TEAM')!,
