@@ -158,13 +158,20 @@ if (menu.alreadyLoaded()) {
     style.flexDirection = 'row';
     style.gap = '1rem';
   });
-  const btn9 = new ButtonComponent('Toggle cherry blossom petals');
+  const btn9 = new ButtonComponent('Cherry blossom petals');
   btn9.onClick(() => {
     const state_before =
       (localStorage.getItem('KITSUNE_outro_VIDEO_SEEN') || 'false') === 'true';
     localStorage.setItem('KITSUNE_outro_VIDEO_SEEN', String(!state_before));
   });
+  const btn10 = new ButtonComponent('Rainbow city lights');
+  btn10.onClick(() => {
+    const state_before =
+      (localStorage.getItem('rainbowTopTeam') || 'false') === 'true';
+    localStorage.setItem('rainbowTopTeam', String(!state_before));
+  });
   g9.renderChild((e) => btn9.render(e));
+  g9.renderChild((e) => btn10.render(e));
   m9.renderChild((e) => g9.render(e));
   menu.addChild(m9);
 

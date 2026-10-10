@@ -95,6 +95,17 @@ const load = () => {
   window.menuLoaded = true;
   window.sr.prototype.tick = () => {}; // disables top team changes
 
+  let currentTeamIdx = 0;
+  window.setInterval(() => {
+    if (localStorage.getItem('rainbowTopTeam') !== 'true') return;
+
+    const teams = ['red', 'yellow', 'green', 'blue'];
+    const team = teams[currentTeamIdx];
+    currentTeamIdx = (currentTeamIdx + 1) % teams.length;
+
+    localStorage.setItem('KITSUNE_FIRST_PLACE', `"${team}"`);
+  }, 1000);
+
   window.addEventListener('keydown', menuOpenListener);
 };
 
