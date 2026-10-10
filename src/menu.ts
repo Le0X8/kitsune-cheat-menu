@@ -1,4 +1,5 @@
 import { Component } from './components/component';
+import { searchLocations, teleport } from './teleport';
 
 const overworldSprite = document.createElement('img');
 overworldSprite.src = 'overworld-sprite.png';
@@ -91,6 +92,16 @@ const menuOpenListener = (event: KeyboardEvent) => {
   else closeMenu();
 };
 
+const teleportListener = (event: KeyboardEvent) => {
+  if (menuOpenRunning) return;
+  if (event.key !== 't' || menuOpen) return;
+
+  event.preventDefault();
+  event.stopPropagation();
+
+  openTeleportMenu();
+};
+
 const load = async () => {
   window.menuLoaded = true;
 
@@ -112,6 +123,27 @@ const load = async () => {
   }, 1000);
 
   window.addEventListener('keydown', menuOpenListener);
+  window.addEventListener('keydown', teleportListener);
+  window.addEventListener('keydown', (ev) => {
+    if (menuOpen) return;
+    if (ev.key !== 'f' && ev.key !== 'F11') return;
+
+    ev.stopPropagation();
+    ev.preventDefault();
+
+    const fullscreen = document.fullscreenElement !== null;
+
+    if (fullscreen) {
+      document.exitFullscreen();
+      return;
+    }
+
+    document.body.requestFullscreen();
+  });
+
+  const style = document.createElement('style');
+  style.innerHTML = '*:focus{outline: none;}';
+  document.head.appendChild(style);
 };
 
 const alreadyLoaded = () => {
@@ -143,9 +175,112 @@ menuElement.style.overflowY = 'auto';
 menuElement.style.fontFamily = 'PixelMplus10, sans-serif';
 document.body.appendChild(menuElement);
 
-let blockInputListenerA: unknown = null;
-let blockInputListenerB: unknown = null;
-let blockInputListenerC: unknown = null;
+const teleportElement = document.createElement('div');
+teleportElement.style.position = 'fixed';
+teleportElement.style.top = '0';
+teleportElement.style.left = '0';
+teleportElement.style.width = 'calc(100vw - 4rem)';
+teleportElement.style.height = 'calc(100vh - 4rem)';
+teleportElement.style.backgroundColor = '#000a';
+teleportElement.style.color = '#fff';
+teleportElement.style.zIndex = '9999';
+teleportElement.style.padding = '2rem';
+teleportElement.style.display = 'none';
+teleportElement.style.opacity = '0';
+teleportElement.style.transition = 'all 0.33s';
+teleportElement.style.overflowY = 'auto';
+teleportElement.style.fontFamily = 'PixelMplus10, sans-serif';
+document.body.appendChild(teleportElement);
+
+const searchInput = document.createElement('input');
+searchInput.type = 'text';
+searchInput.placeholder = 'Search...';
+searchInput.style.width = 'calc(100vw - 6.25rem)';
+searchInput.style.padding = '0.5rem 1rem';
+searchInput.style.fontSize = '1rem';
+searchInput.style.border = '2px solid #fff';
+searchInput.style.backgroundColor = '#000a';
+searchInput.style.color = '#fff';
+searchInput.style.fontFamily = 'PixelMplus10, sans-serif';
+searchInput.value = '';
+teleportElement.appendChild(searchInput);
+
+searchInput.addEventListener('input', () => updateTeleportList());
+
+let teleportListSelected = 0;
+let teleportListResults: [string, string, string][] = [];
+let teleportListListener = (event: KeyboardEvent) => {
+  if (event.key === 'ArrowDown') {
+    event.preventDefault();
+    teleportListSelected =
+      (teleportListSelected + 1) % teleportListResults.length;
+    updateTeleportList(true);
+  } else if (event.key === 'ArrowUp') {
+    event.preventDefault();
+    teleportListSelected =
+      (teleportListSelected - 1 + teleportListResults.length) %
+      teleportListResults.length;
+    updateTeleportList(true);
+  } else if (event.key === 'Enter') {
+    event.preventDefault();
+    const [name, dimension, location] =
+      teleportListResults[teleportListSelected];
+    teleport(dimension, location);
+    showMsg(`Teleporting to ${name}`, 'info');
+    closeMenu();
+  } else if (event.key === 'Escape') {
+    event.preventDefault();
+    closeMenu();
+  }
+};
+function updateTeleportList(noSearch: boolean = false) {
+  if (!noSearch) {
+    const search = searchInput.value.trim();
+    teleportListResults = searchLocations(search);
+    teleportListSelected = 0;
+
+    searchInput.removeEventListener('keydown', teleportListListener);
+    searchInput.addEventListener('keydown', teleportListListener);
+  }
+
+  teleportList.innerHTML = '';
+
+  teleportListResults.forEach(([name, dimension, location], i) => {
+    const isSelected = i === teleportListSelected;
+    const button = document.createElement('button');
+    button.innerText = name;
+    button.style.padding = '0.5rem 1rem';
+    button.style.fontSize = '1rem';
+    button.style.color = '#fffa';
+    button.style.border = '2px solid #fffa';
+    if (isSelected) {
+      button.style.color = '#fff';
+      button.style.border = '2px solid #fff';
+    }
+    button.style.backgroundColor = '#0000';
+    button.style.fontFamily = 'PixelMplus10, sans-serif';
+    button.style.cursor = 'pointer';
+    button.style.textAlign = 'left';
+    button.addEventListener('click', () => {
+      teleport(dimension, location);
+      showMsg(`Teleporting to ${name}`, 'info');
+      closeMenu();
+    });
+    teleportList.appendChild(button);
+  });
+  teleportList.children[teleportListSelected]?.scrollIntoView({
+    block: 'nearest',
+  });
+}
+
+const teleportList = document.createElement('div');
+teleportList.style.marginTop = '0.5rem';
+teleportList.style.display = 'flex';
+teleportList.style.flexDirection = 'column';
+teleportList.style.gap = '0.5rem';
+teleportElement.appendChild(teleportList);
+
+updateTeleportList();
 
 const openMenu = () => {
   if (menuOpenRunning) return;
@@ -157,22 +292,29 @@ const openMenu = () => {
   menuElement.focus();
   menuElement.click();
 
-  blockInputListenerA = window.addEventListener('keydown', (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    menuOpenListener(event);
-  });
-  blockInputListenerB = window.addEventListener('keyup', (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-  });
-  blockInputListenerC = window.addEventListener('keypress', (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-  });
-
   setTimeout(() => {
     menuElement.style.opacity = '1';
+  }, 100);
+
+  setTimeout(() => {
+    menuOpenRunning = false;
+  }, 600);
+};
+
+const openTeleportMenu = () => {
+  if (menuOpenRunning) return;
+  menuOpenRunning = true;
+  teleportElement.style.display = 'block';
+  menuOpen = true;
+
+  searchInput.value = '';
+  updateTeleportList();
+  searchInput.tabIndex = -1;
+  searchInput.focus();
+  searchInput.click();
+
+  setTimeout(() => {
+    teleportElement.style.opacity = '1';
   }, 100);
 
   setTimeout(() => {
@@ -184,11 +326,8 @@ const closeMenu = () => {
   if (menuOpenRunning) return;
   menuOpenRunning = true;
   menuElement.style.opacity = '0';
+  teleportElement.style.opacity = '0';
   menuOpen = false;
-
-  window.removeEventListener('keydown', blockInputListenerA as EventListener);
-  window.removeEventListener('keyup', blockInputListenerB as EventListener);
-  window.removeEventListener('keypress', blockInputListenerC as EventListener);
 
   document.querySelector('canvas')!.tabIndex = -1;
   document.querySelector('canvas')?.focus();
@@ -196,6 +335,7 @@ const closeMenu = () => {
 
   setTimeout(() => {
     menuElement.style.display = 'none';
+    teleportElement.style.display = 'none';
     menuOpenRunning = false;
   }, 600);
 };
