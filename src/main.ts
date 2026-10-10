@@ -155,7 +155,7 @@ if (menu.alreadyLoaded()) {
     });
     const g = new GroupComponent();
 
-    const btn = new ButtonComponent('Join');
+    const btn = new ButtonComponent('No team');
     btn.onClick(() => localStorage.removeItem('KITSUNE_PLAYER_TEAM'));
 
     g.renderChild((e) => btn.render(e));
@@ -177,12 +177,14 @@ if (menu.alreadyLoaded()) {
         'true';
       localStorage.setItem('KITSUNE_outro_VIDEO_SEEN', String(!state_before));
     });
+    const g10 = new GroupComponent();
     const btn10 = new ButtonComponent('Rainbow city lights');
     btn10.onClick(() => {
       const state_before =
         (localStorage.getItem('rainbowTopTeam') || 'false') === 'true';
       localStorage.setItem('rainbowTopTeam', String(!state_before));
     });
+    const g11 = new GroupComponent();
     const btn11 = new ButtonComponent('Make own team first place');
     btn11.onClick(() => {
       localStorage.setItem('rainbowTopTeam', 'false');
@@ -192,9 +194,11 @@ if (menu.alreadyLoaded()) {
       );
     });
     g9.renderChild((e) => btn9.render(e));
-    g9.renderChild((e) => btn10.render(e));
-    g9.renderChild((e) => btn11.render(e));
+    g10.renderChild((e) => btn10.render(e));
+    g11.renderChild((e) => btn11.render(e));
     m9.renderChild((e) => g9.render(e));
+    m9.renderChild((e) => g10.render(e));
+    m9.renderChild((e) => g11.render(e));
     menu.addChild(m9);
 
     if (window.codeMod) {
