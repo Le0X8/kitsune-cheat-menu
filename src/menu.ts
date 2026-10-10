@@ -71,6 +71,7 @@ const showMsg = (message: string, type: MsgType) => {
 declare global {
   interface Window {
     menuLoaded: boolean;
+    sr: any;
   }
 }
 
@@ -92,6 +93,7 @@ const menuOpenListener = (event: KeyboardEvent) => {
 
 const load = () => {
   window.menuLoaded = true;
+  window.sr.prototype.tick = () => {}; // disables top team changes
 
   window.addEventListener('keydown', menuOpenListener);
 };
